@@ -1,5 +1,5 @@
+import Part from 'components/Part';
 import React from 'react';
-import Part from './Part';
 
 const Content = ({ parts }) => {
 	return (

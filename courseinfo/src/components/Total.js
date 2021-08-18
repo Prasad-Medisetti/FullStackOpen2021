@@ -1,15 +1,14 @@
 import React from 'react';
 
 const Total = ({ parts }) => {
-	let total = 0;
-	parts.forEach((part) => {
-		total += part.exercises;
-	});
+	const total = parts.reduce((sum, { exercises }) => {
+		return sum + exercises;
+	}, 0);
 
 	return (
-		<>
-			<p>Number of exercises : {total}</p>
-		</>
+		<p>
+			<strong>Total of {total} exercises</strong>
+		</p>
 	);
 };
 
