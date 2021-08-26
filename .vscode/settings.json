@@ -1,4 +1,11 @@
 {
+	"window.zoomLevel": -1,
+	"markdown.preview.fontFamily": "Victor Mono, STACKr Code, Cascadia Code",
 	"terminal.integrated.fontSize": 16,
-	"window.zoomLevel": -1
+	"editor.codeLensFontFamily": "Victor Mono, STACKr Code, Cascadia Code",
+	"editor.fontFamily": "Victor Mono, STACKr Code, Cascadia Code",
+	"editor.inlayHints.fontFamily": "Victor Mono, STACKr Code, Cascadia Code",
+	"editor.fontWeight": "700",
+	"editor.fontLigatures": true,
+	"editor.fontSize": 16
 }
