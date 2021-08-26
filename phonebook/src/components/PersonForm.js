@@ -9,18 +9,13 @@ const PersonForm = ({
 }) => {
 	return (
 		<form onSubmit={addPerson}>
-			<div>
-				<div>
-					Name: <input value={newName} onChange={handleNameChange} />
-				</div>
-				<div>
-					Number: <input value={newNumber} onChange={handleNumberChange} />
-				</div>
-			</div>
-
-			<div>
-				<button type='submit'>add</button>
-			</div>
+			<input placeholder='Name' value={newName} onChange={handleNameChange} />
+			<input
+				placeholder='Number'
+				value={newNumber}
+				onChange={handleNumberChange}
+			/>
+			<button type='submit'>Add</button>
 		</form>
 	);
 };

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import Filter from 'components/Filter';
 import Heading from 'components/Heading';
 import PersonForm from 'components/PersonForm';
 import Persons from 'components/Persons';
 import React, { useEffect, useState } from 'react';
+import personsService from 'services/persons';
 import './App.css';
 
 const App = () => {
@@ -13,9 +13,12 @@ const App = () => {
 	const [search, setSearch] = useState('');
 
 	useEffect(() => {
-		axios.get('http://localhost:3001/persons').then((response) => {
-			setPersons(response.data);
-		});
+		personsService
+			.getAll()
+			.then((initialPersons) => {
+				setPersons(initialPersons);
+			})
+			.catch((err) => alert(err));
 	}, []);
 
 	const handleNameChange = (event) => {
@@ -44,15 +47,53 @@ const App = () => {
 
 	const addPerson = (event) => {
 		event.preventDefault();
-		const allPersons = persons.filter((person) => person.name === newName);
-		if (newName === '') {
-			alert('Please enter  name and number.');
+
+		// Check the person already exists in the database
+		const existingPerson = persons.filter(
+			(person) => person.name.toLowerCase() === newName.toLowerCase(),
+		)[0];
+
+		// Verify the fields were filled
+		if (newName === '' || newNumber === '') {
+			alert('Please fill the fields.');
 			return;
-		} else if (allPersons.length > 0) {
-			console.log(persons.filter((person) => person.name === newName));
-			alert(`${newName} is already added to phonebook`);
-			return;
-		} else {
+		}
+
+		// Check the person exists and name already exists in the database
+		else if (existingPerson && existingPerson.name === newName) {
+			// The person exists and check the number is not same as the number in the database then update the number
+			if (
+				existingPerson.number !== newNumber &&
+				window.confirm(
+					`"${existingPerson.name}" is already added to phonebook, replace the old number "${existingPerson.number}" with the new number "${newNumber}" ?`,
+				)
+			) {
+				const changedPerson = { ...existingPerson, number: newNumber };
+				personsService
+					.update(changedPerson.id, changedPerson)
+					.then((savedPerson) => {
+						setPersons(
+							persons.map((person) =>
+								person.id !== savedPerson.id ? person : savedPerson,
+							),
+						);
+						setNewName('');
+						setNewNumber('');
+						return;
+					})
+					.catch((err) => alert(err));
+				return;
+			}
+
+			// The person exists and both name and number are same as the database
+			else {
+				alert(`"${newName}" is already added to phonebook`);
+				return;
+			}
+		}
+
+		// The person doesn't exists in the database
+		else {
 			const newPerson = {
 				name: newName,
 				number: newNumber,
@@ -60,15 +101,35 @@ const App = () => {
 				id: persons.length + 1,
 			};
 
-			setPersons(persons.concat(newPerson));
-			setNewName('');
-			setNewNumber('');
+			personsService
+				.create(newPerson)
+				.then((savedPerson) => {
+					setPersons(persons.concat(savedPerson));
+					setNewName('');
+					setNewNumber('');
+				})
+				.catch((err) => alert(err));
+		}
+	};
+
+	const handleDelete = (personTobeDeleted) => {
+		if (window.confirm(`Delete "${personTobeDeleted.name}" ?`)) {
+			personsService
+				.remove(personTobeDeleted.id)
+				.then(() => {
+					setPersons(
+						persons.filter((person) => person.id !== personTobeDeleted.id),
+					);
+				})
+				.catch((err) => alert(err));
+		} else {
+			return;
 		}
 	};
 
 	return (
 		<>
-			<Heading text='Phonebook' component='h2' />
+			<Heading text='Phonebook' component='h1' />
 			<Filter search={search} handleSearchChange={handleSearchChange} />
 			<Heading text='Add new person' component='h2' />
 			<PersonForm
@@ -79,7 +140,7 @@ const App = () => {
 				addPerson={addPerson}
 			/>
 			<Heading text='Numbers' component='h2' />
-			<Persons persons={filteredPersons} />
+			<Persons persons={filteredPersons} handleDelete={handleDelete} />
 		</>
 	);
 };

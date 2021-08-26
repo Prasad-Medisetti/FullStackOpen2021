@@ -1,17 +1,21 @@
 import Person from 'components/Person';
 import React from 'react';
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, handleDelete }) => {
 	return (
 		<>
 			{persons.length > 0 ? (
-				<>
+				<ul>
 					{persons.map((person) => (
-						<Person person={person} key={person.id} />
+						<Person
+							person={person}
+							key={person.id}
+							handleDelete={handleDelete}
+						/>
 					))}
-				</>
+				</ul>
 			) : (
-				<p>No results</p>
+				<p>No contacts...</p>
 			)}
 		</>
 	);
