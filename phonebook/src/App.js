@@ -1,5 +1,6 @@
 import Filter from 'components/Filter';
 import Heading from 'components/Heading';
+import Notification from 'components/Notification';
 import PersonForm from 'components/PersonForm';
 import Persons from 'components/Persons';
 import React, { useEffect, useState } from 'react';
@@ -11,14 +12,30 @@ const App = () => {
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
 	const [search, setSearch] = useState('');
+	const [successMessage, setSuccessMessage] = useState(null);
+	const [errorMessage, setErrorMessage] = useState(null);
+	const [loadingMessage, setLoadingMessage] = useState(null);
 
 	useEffect(() => {
+		setLoadingMessage('Loading...');
 		personsService
 			.getAll()
 			.then((initialPersons) => {
 				setPersons(initialPersons);
+				setLoadingMessage(null);
 			})
-			.catch((err) => alert(err));
+			.catch((err) => {
+				console.log({ ...err });
+				setErrorMessage(
+					`A network error occurred while connecting to the server...`,
+				);
+				setLoadingMessage(
+					`A network error occurred while connecting to the server...`,
+				);
+				setTimeout(() => {
+					setErrorMessage(null);
+				}, 5000);
+			});
 	}, []);
 
 	const handleNameChange = (event) => {
@@ -55,7 +72,10 @@ const App = () => {
 
 		// Verify the fields were filled
 		if (newName === '' || newNumber === '') {
-			alert('Please fill the fields.');
+			setErrorMessage('Please fill the fields.');
+			setTimeout(() => {
+				setErrorMessage(null);
+			}, 5000);
 			return;
 		}
 
@@ -77,17 +97,51 @@ const App = () => {
 								person.id !== savedPerson.id ? person : savedPerson,
 							),
 						);
+						setSuccessMessage(
+							`Updated "${changedPerson.name}" number "${changedPerson.number}" to "${newNumber}"`,
+						);
+						setTimeout(() => {
+							setSuccessMessage(null);
+						}, 5000);
 						setNewName('');
 						setNewNumber('');
 						return;
 					})
-					.catch((err) => alert(err));
+					.catch((err) => {
+						if (err.response?.status === 404) {
+							setErrorMessage(
+								`Information of "${changedPerson.name}" has already been removed from server`,
+							);
+							setTimeout(() => {
+								setErrorMessage(null);
+							}, 5000);
+							setPersons(
+								persons.filter((person) => person.id !== changedPerson.id),
+							);
+							setNewName('');
+							setNewNumber('');
+						} else {
+							console.log({ ...err });
+							setErrorMessage(
+								`A network error occurred while connecting to the server...`,
+								err.response?.statusText,
+							);
+							setTimeout(() => {
+								setErrorMessage(null);
+							}, 5000);
+						}
+					});
 				return;
 			}
 
 			// The person exists and both name and number are same as the database
 			else {
-				alert(`"${newName}" is already added to phonebook`);
+				setErrorMessage(
+					`"${newName}" is already added to phonebook with number "${existingPerson.number}"`,
+				);
+				setTimeout(() => {
+					setErrorMessage(null);
+				}, 5000);
 				return;
 			}
 		}
@@ -105,10 +159,25 @@ const App = () => {
 				.create(newPerson)
 				.then((savedPerson) => {
 					setPersons(persons.concat(savedPerson));
+					setSuccessMessage(
+						`Added "${savedPerson.name}" with number "${savedPerson.number}"`,
+					);
+					setTimeout(() => {
+						setSuccessMessage(null);
+					}, 5000);
 					setNewName('');
 					setNewNumber('');
 				})
-				.catch((err) => alert(err));
+				.catch((err) => {
+					console.log({ ...err });
+					setErrorMessage(
+						`A network error occurred while adding "${newPerson.name}" ...`,
+						err.response?.statusText,
+					);
+					setTimeout(() => {
+						setErrorMessage(null);
+					}, 5000);
+				});
 		}
 	};
 
@@ -120,8 +189,37 @@ const App = () => {
 					setPersons(
 						persons.filter((person) => person.id !== personTobeDeleted.id),
 					);
+					setSuccessMessage(
+						`Deleted ${personTobeDeleted.name}" with number "${personTobeDeleted.number}"`,
+					);
+					setTimeout(() => {
+						setSuccessMessage(null);
+					}, 5000);
 				})
-				.catch((err) => alert(err));
+				.catch((err) => {
+					if (err.response?.status === 404) {
+						setErrorMessage(
+							`Information of "${personTobeDeleted.name}" has already been removed from server`,
+						);
+						setTimeout(() => {
+							setErrorMessage(null);
+						}, 5000);
+						setPersons(
+							persons.filter((person) => person.id !== personTobeDeleted.id),
+						);
+						setNewName('');
+						setNewNumber('');
+					} else {
+						console.log({ ...err });
+						setErrorMessage(
+							`A network error occurred while deleting "${personTobeDeleted.name}" ...`,
+							err.response?.statusText,
+						);
+						setTimeout(() => {
+							setErrorMessage(null);
+						}, 5000);
+					}
+				});
 		} else {
 			return;
 		}
@@ -130,6 +228,10 @@ const App = () => {
 	return (
 		<>
 			<Heading text='Phonebook' component='h1' />
+			<Notification
+				successMessage={successMessage}
+				errorMessage={errorMessage}
+			/>
 			<Filter search={search} handleSearchChange={handleSearchChange} />
 			<Heading text='Add new person' component='h2' />
 			<PersonForm
@@ -140,7 +242,11 @@ const App = () => {
 				addPerson={addPerson}
 			/>
 			<Heading text='Numbers' component='h2' />
-			<Persons persons={filteredPersons} handleDelete={handleDelete} />
+			<Persons
+				persons={filteredPersons}
+				handleDelete={handleDelete}
+				loadingMessage={loadingMessage}
+			/>
 		</>
 	);
 };

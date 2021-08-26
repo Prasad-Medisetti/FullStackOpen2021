@@ -16,6 +16,10 @@ code {
 		monospace;
 }
 
+p {
+	margin-left: 1em;
+}
+
 button {
 	display: inline-block;
 	font-weight: 400;
@@ -115,4 +119,46 @@ li button:hover {
 	color: #fff;
 	background-color: #bf2231;
 	border-color: #bd2130;
+}
+
+/* The alert message box */
+.message {
+	display: block;
+	opacity: 1;
+	padding: 0.75em 1em;
+	margin: 1em 1.25em;
+	border-radius: 0.25em;
+	background-color: #d6d8d9;
+	border-color: #c6c8ca;
+	transition: 0.4s linear;
+	color: #212529;
+	font-weight: 500;
+	font-size: 1em;
+}
+/* The close button */
+/* .closebtn {
+	margin-left: 15px;
+	font-weight: bold;
+	float: right;
+	font-size: 1.5em;
+	line-height: 0.75em;
+	cursor: pointer;
+	transition: 0.3s;
+} */
+/* When moving the mouse over the close button */
+/* .closebtn:hover {
+	opacity: 0.75;
+	transform: scale(1.25);
+} */
+
+.error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+
+.success {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
 }

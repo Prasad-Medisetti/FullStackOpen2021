@@ -1,7 +1,7 @@
 import Person from 'components/Person';
 import React from 'react';
 
-const Persons = ({ persons, handleDelete }) => {
+const Persons = ({ persons, handleDelete, loadingMessage }) => {
 	return (
 		<>
 			{persons.length > 0 ? (
@@ -15,7 +15,7 @@ const Persons = ({ persons, handleDelete }) => {
 					))}
 				</ul>
 			) : (
-				<p>No contacts...</p>
+				<p>{loadingMessage ? loadingMessage : 'No Contacts ...'}</p>
 			)}
 		</>
 	);
