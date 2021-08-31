@@ -1,5 +1,7 @@
-const express = require('express');
-const cors = require('cors');
+const express = require('express'),
+	cors = require('cors'),
+	morgan = require('morgan');
+const { post } = require('got');
 
 let persons = [
 	{
@@ -27,6 +29,14 @@ let persons = [
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+morgan.token('body', function (req, res) {
+	return JSON.stringify(req.body);
+});
+
+app.use(
+	morgan(':method :url :status :res[content-length] - :response-time ms :body'),
+);
 
 app.get('/', (req, res) => {
 	res.send('<h1>Hello World!</h1>');
