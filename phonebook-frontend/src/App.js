@@ -25,7 +25,6 @@ const App = () => {
 				setLoadingMessage(null);
 			})
 			.catch((err) => {
-				console.log({ ...err });
 				setErrorMessage(
 					`A network error occurred while connecting to the server...`,
 				);
