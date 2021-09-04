@@ -4,9 +4,14 @@
 	"description": "Phonebook Backend",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index",
-		"dev": "NODE_ENV=development nodemon index",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"start": "node index.js",
+		"dev": "NODE_ENV=development nodemon index.js",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build:ui": "rm -rf build && cd ../phonebook-frontend && yarn run build --prod && cp -r build ../phonebook-backend/public",
+		"deploy": "git push heroku master",
+		"msg": "timestamp=$(date +\"%A, %d %B, %Y %I:%M %r\") && echo \"automated deployment - $timestamp\";",
+		"deploy:full": "yarn run build:ui && git add . && timestamp=$(date +\"%A, %d %B, %Y %I:%M %r\")  && git commit -m \"UI Build - $timestamp\" && yarn run deploy",
+		"logs:prod": "heroku logs --tail"
 	},
 	"author": "Prasad Medisetti",
 	"license": "MIT",

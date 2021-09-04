@@ -52,9 +52,11 @@ const App = () => {
 		setSearch(event.target.value);
 	};
 
-	const filteredPersons = persons.filter((person) =>
-		person.name.toLowerCase().includes(search.toLowerCase()),
-	);
+	const filteredPersons =
+		persons &&
+		persons.filter((person) =>
+			person.name.toLowerCase().includes(search.toLowerCase()),
+		);
 
 	// Filter using Regex
 	// const filteredPersons = persons.filter((person) =>
@@ -107,28 +109,13 @@ const App = () => {
 						return;
 					})
 					.catch((err) => {
-						if (err.response?.status === 404) {
-							setErrorMessage(
-								`Information of "${changedPerson.name}" has already been removed from server`,
-							);
-							setTimeout(() => {
-								setErrorMessage(null);
-							}, 5000);
-							setPersons(
-								persons.filter((person) => person.id !== changedPerson.id),
-							);
-							setNewName('');
-							setNewNumber('');
-						} else {
-							console.log({ ...err });
-							setErrorMessage(
-								`A network error occurred while connecting to the server...`,
-								err.response?.statusText,
-							);
-							setTimeout(() => {
-								setErrorMessage(null);
-							}, 5000);
-						}
+						setErrorMessage(
+							`A network error occurred while connecting to the server...`,
+							err.response?.statusText,
+						);
+						setTimeout(() => {
+							setErrorMessage(null);
+						}, 5000);
 					});
 				return;
 			}
@@ -184,7 +171,21 @@ const App = () => {
 		if (window.confirm(`Delete "${personTobeDeleted.name}" ?`)) {
 			personsService
 				.remove(personTobeDeleted.id)
-				.then(() => {
+				.then((res) => {
+					if (res.error) {
+						setErrorMessage(
+							`Information of "${personTobeDeleted.name}" has already been removed from server or doesn't exist on the server`,
+						);
+						setTimeout(() => {
+							setErrorMessage(null);
+						}, 5000);
+						setPersons(
+							persons.filter((person) => person.id !== personTobeDeleted.id),
+						);
+						setNewName('');
+						setNewNumber('');
+						return;
+					}
 					setPersons(
 						persons.filter((person) => person.id !== personTobeDeleted.id),
 					);
@@ -196,28 +197,13 @@ const App = () => {
 					}, 5000);
 				})
 				.catch((err) => {
-					if (err.response?.status === 404) {
-						setErrorMessage(
-							`Information of "${personTobeDeleted.name}" has already been removed from server`,
-						);
-						setTimeout(() => {
-							setErrorMessage(null);
-						}, 5000);
-						setPersons(
-							persons.filter((person) => person.id !== personTobeDeleted.id),
-						);
-						setNewName('');
-						setNewNumber('');
-					} else {
-						console.log({ ...err });
-						setErrorMessage(
-							`A network error occurred while deleting "${personTobeDeleted.name}" ...`,
-							err.response?.statusText,
-						);
-						setTimeout(() => {
-							setErrorMessage(null);
-						}, 5000);
-					}
+					setErrorMessage(
+						`A network error occurred while deleting "${personTobeDeleted.name}" ...`,
+						err.response?.statusText,
+					);
+					setTimeout(() => {
+						setErrorMessage(null);
+					}, 5000);
 				});
 		} else {
 			return;

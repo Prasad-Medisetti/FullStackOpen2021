@@ -1,7 +1,6 @@
 const express = require('express'),
 	cors = require('cors'),
 	morgan = require('morgan');
-const { post } = require('got');
 
 let persons = [
 	{
@@ -29,6 +28,7 @@ let persons = [
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.static('public'));
 
 morgan.token('body', function (req, res) {
 	return JSON.stringify(req.body);
@@ -127,15 +127,13 @@ app.delete('/api/persons/:id', (req, res) => {
 	if (!person)
 		return res
 			.json({ error: `Person with id ${personId} doesn't exist` })
-			.status(204)
+			.status(404)
 			.end();
 
-	let { id, ...deletedPerson } = person;
-
-	res.json(deletedPerson).end();
+	res.status(204).end();
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });

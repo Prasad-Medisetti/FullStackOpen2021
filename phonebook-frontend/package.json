@@ -2,6 +2,7 @@
 	"name": "phonebook-frontend",
 	"version": "1.0.0",
 	"description": "Phonebook Frontend",
+	"proxy": "http://localhost:3001",
 	"private": true,
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.11.4",
@@ -12,6 +13,9 @@
 		"react-dom": "^17.0.2",
 		"react-scripts": "4.0.3",
 		"web-vitals": "^1.0.1"
+	},
+	"devDependencies": {
+		"json-server": "^0.16.3"
 	},
 	"scripts": {
 		"start": "BROWSER=none react-scripts start",
@@ -37,8 +41,5 @@
 			"last 1 firefox version",
 			"last 1 safari version"
 		]
-	},
-	"devDependencies": {
-		"json-server": "^0.16.3"
 	}
 }
