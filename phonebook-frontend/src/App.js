@@ -93,13 +93,16 @@ const App = () => {
 				personsService
 					.update(changedPerson.id, changedPerson)
 					.then((savedPerson) => {
+						const originalPerson = persons.find(
+							(person) => person.id === savedPerson.id,
+						);
 						setPersons(
 							persons.map((person) =>
 								person.id !== savedPerson.id ? person : savedPerson,
 							),
 						);
 						setSuccessMessage(
-							`Updated "${changedPerson.name}" number "${changedPerson.number}" to "${newNumber}"`,
+							`Updated "${originalPerson.name}" number "${originalPerson.number}" to "${newNumber}"`,
 						);
 						setTimeout(() => {
 							setSuccessMessage(null);

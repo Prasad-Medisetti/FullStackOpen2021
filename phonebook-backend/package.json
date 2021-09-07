@@ -7,7 +7,7 @@
 		"start": "node index.js",
 		"dev": "NODE_ENV=development nodemon index.js",
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build:ui": "rm -rf build && cd ../phonebook-frontend && yarn run build --prod && cp -r build ../phonebook-backend/public",
+		"build:ui": "rm -rf public && cd ../phonebook-frontend && yarn run build --prod && cp -r build ../phonebook-backend/public",
 		"deploy": "git push heroku master",
 		"msg": "timestamp=$(date +\"%A, %d %B, %Y %I:%M %r\") && echo \"automated deployment - $timestamp\";",
 		"deploy:full": "yarn run build:ui && git add . && timestamp=$(date +\"%A, %d %B, %Y %I:%M %r\")  && git commit -m \"UI Build - $timestamp\" && yarn run deploy",
@@ -20,6 +20,7 @@
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"mongoose": "^6.0.5",
 		"morgan": "^1.10.0"
