@@ -71,17 +71,8 @@ const App = () => {
 			(person) => person.name.toLowerCase() === newName.toLowerCase(),
 		)[0];
 
-		// Verify the fields were filled
-		if (newName === '' || newNumber === '') {
-			setErrorMessage('Please fill the fields.');
-			setTimeout(() => {
-				setErrorMessage(null);
-			}, 5000);
-			return;
-		}
-
 		// Check the person exists and name already exists in the database
-		else if (existingPerson && existingPerson.name === newName) {
+		if (existingPerson && existingPerson.name === newName) {
 			// The person exists and check the number is not same as the number in the database then update the number
 			if (
 				existingPerson.number !== newNumber &&
@@ -112,10 +103,7 @@ const App = () => {
 						return;
 					})
 					.catch((err) => {
-						setErrorMessage(
-							`A network error occurred while connecting to the server...`,
-							err.response?.statusText,
-						);
+						setErrorMessage(err.response.data.error);
 						setTimeout(() => {
 							setErrorMessage(null);
 						}, 5000);
@@ -158,11 +146,7 @@ const App = () => {
 					setNewNumber('');
 				})
 				.catch((err) => {
-					console.log({ ...err });
-					setErrorMessage(
-						`A network error occurred while adding "${newPerson.name}" ...`,
-						err.response?.statusText,
-					);
+					setErrorMessage(err.response.data.error);
 					setTimeout(() => {
 						setErrorMessage(null);
 					}, 5000);
@@ -200,10 +184,11 @@ const App = () => {
 					}, 5000);
 				})
 				.catch((err) => {
-					setErrorMessage(
-						`A network error occurred while deleting "${personTobeDeleted.name}" ...`,
-						err.response?.statusText,
-					);
+					if (err.response.status === 404)
+						setPersons(
+							persons.filter((person) => person.id !== personTobeDeleted.id),
+						);
+					setErrorMessage(err.response.data.error);
 					setTimeout(() => {
 						setErrorMessage(null);
 					}, 5000);
