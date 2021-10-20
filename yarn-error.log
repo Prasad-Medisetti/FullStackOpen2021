@@ -1,0 +1,27 @@
+Arguments: 
+  /home/prasad-m/.nvm/versions/node/v14.16.1/bin/node /home/prasad-m/.nvm/versions/node/v14.16.1/bin/yarn add jest --dev
+
+PATH: 
+  /home/prasad-m/.nvm/versions/node/v14.16.1/bin:/home/prasad-m/.vscode-server/bin/e7d7e9a9348e6a8cc8c03f877d39cb72e5dfb1ff/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/PROGRA~2/RATIONAL/RATION~1/NUTCROOT/bin:/mnt/c/PROGRA~2/RATIONAL/RATION~1/NUTCROOT/bin/x11:/mnt/c/PROGRA~2/RATIONAL/RATION~1/NUTCROOT/mksnt:/mnt/c/Program Files/Java/jdk1.8.0_281/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/dotnet/:/mnt/c/Users/Prasa/AppData/Local/Microsoft/WindowsApps/python.exe:/mnt/c/Program Files (x86)/Rational/ClearQuest:/mnt/c/Program Files (x86)/Rational/Rose/TopLink/:/mnt/c/Program Files (x86)/Rational/Rational Test:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/nodejs/:/mnt/c/Users/Prasa/AppData/Local/Programs/Python/Python39/Scripts/:/mnt/c/Users/Prasa/AppData/Local/Programs/Python/Python39/:/mnt/c/Users/Prasa/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/heroku/bin:/mnt/e/Xampp/php:/mnt/c/Users/Prasa/AppData/Local/ComposerSetup/bin:/mnt/c/Users/Prasa/AppData/Roaming/Composer/vendor/bin:/mnt/c/Users/Prasa/AppData/Local/GitHubDesktop/bin:/mnt/c/Program Files/Java/jdk1.8.0_281/bin:/mnt/c/Users/Prasa/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Program Files/Sublime Text:/mnt/c/Users/Prasa/AppData/Local/atom:/mnt/c/Users/Prasa/AppData/Local/Programs/Hyper/resources/bin:/mnt/c/Users/Prasa/AppData/Roaming/npm:/home/prasad-m/.fzf/bin
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  14.16.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:67:26)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
